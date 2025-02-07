@@ -1,28 +1,11 @@
 var app = angular.module('myApp', []);
 
 app.controller('MainController', function($scope, $http) {
-    $scope.isAuthenticated = false;
-    $scope.credentials = {};
     $scope.newMonster = {};
     $scope.monsters = [];
-    $scope.foundMonster = null; // To store the found monster
+    $scope.foundMonster = null; // Initialize found monster
 
-    // Mock authentication
-    $scope.login = function() {
-        if ($scope.credentials.username === 'user' && $scope.credentials.password === 'password') {
-            $scope.isAuthenticated = true;
-            $scope.fetchMonsters();
-        } else {
-            alert('Invalid credentials');
-        }
-    };
-
-    $scope.logout = function() {
-        $scope.isAuthenticated = false;
-        $scope.monsters = [];
-        $scope.foundMonster = null; // Reset found monster on logout
-    };
-
+    // Fetch all monsters on controller initialization
     $scope.fetchMonsters = function() {
         $http.get('http://localhost:5000/monsters')  // Update to your Flask API endpoint
             .then(function(response) {
@@ -34,6 +17,10 @@ app.controller('MainController', function($scope, $http) {
             });
     };
 
+    // Call fetchMonsters when the controller is initialized
+    $scope.fetchMonsters();
+
+    // Add a new monster
     $scope.addMonster = function() {
         $http.post('http://localhost:5000/monsters', $scope.newMonster)  // Update to your Flask API endpoint
             .then(function(response) {
@@ -42,6 +29,7 @@ app.controller('MainController', function($scope, $http) {
             });
     };
 
+    // Delete a monster
     $scope.deleteMonster = function(id) {
         $http.delete('http://localhost:5000/monsters/' + id)  // Corrected URL
             .then(function() {
@@ -52,24 +40,12 @@ app.controller('MainController', function($scope, $http) {
             });
     };
 
-    $scope.findMonsterById = function() {
-        const monsterId = $scope.monsterIdToFind; // Get the ID from the input
-        console.log("Finding monster with ID:", monsterId); // Debug log
-        
-        // Check if the monsterId is a valid number
-        if (monsterId === undefined || monsterId === null || monsterId === '' || isNaN(monsterId)) {
-            alert('Please enter a valid Monster ID.');
-            return; // Exit the function if the ID is not valid
-        }
-    
-        // Convert to integer
-        const monsterIdInt = parseInt(monsterId, 10);
-        console.log("Converted Monster ID:", monsterIdInt); // Debug log
-    
-        $http.get('http://localhost:5000/monsters/' + monsterIdInt)  // Corrected URL
+    $scope.findMonsterById = function(id) {
+        // Fetch the monster by ID
+        $http.get('http://localhost:5000/monsters/' + id)  // Corrected URL
             .then(function(response) {
                 $scope.foundMonster = response.data; // Store the found monster
-                console.log("Found Monster:", $scope.foundMonster); // Debug log
+                console.log("Found Monster:", id); // Debug log
             })
             .catch(function(error) {
                 alert('Monster not found!');

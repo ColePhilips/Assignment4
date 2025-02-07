@@ -42,21 +42,21 @@ class Monster(Resource):
             "type": monster_type
         })
 
-    # Read: GET /monsters/<id>
-    def get(self, monster_id=None):
-        if monster_id is not None:
-            # Ensure monster_id is treated as an integer and query by custom "id"
-            monster = mongo.db.monsters.find_one({"id": int(monster_id)})
-            if not monster:
-                return {"message": "Monster not found"}, 404
-            return jsonify({"id": monster["id"], "name": monster["name"], "description": monster["description"], "type": monster["type"]})
-        else:
-            # Fetch all monsters if no ID is provided
+    # Read: GET /monsters or GET /monsters/<id>
+    def get(self, monster_id=0):
+        if monster_id == 0:
+            # Fetch all monsters
             monsters = mongo.db.monsters.find()
             result = []
             for monster in monsters:
                 result.append({"id": monster["id"], "name": monster["name"], "description": monster["description"], "type": monster["type"]})
             return jsonify(result)
+        else:
+            # Fetch a specific monster by ID
+            monster = mongo.db.monsters.find_one({"id": int(monster_id)})
+            if not monster:
+                return {"message": "Monster not found"}, 404
+            return jsonify({"id": monster["id"], "name": monster["name"], "description": monster["description"], "type": monster["type"]})
 
     # Update: PUT /monsters/<id>
     def put(self, monster_id):
