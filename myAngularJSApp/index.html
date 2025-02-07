@@ -13,20 +13,62 @@
     <script> for javascript
 -->
 
-<!DOCTYPE html> <!-- use !tab to generate boiler plate which is the common initial code for html -->
-<html ng-app="myApp">
-<head> <!-- For <meta>, <title>, <script>, <link rel="stylesheet"> -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AngularJS CRUD App</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+    <script src="app.js"></script>
 </head>
-<body><!-- <h1>, <p>, <div>, <img>, <a>, javascripts -->
-    <div ng-controller="myController">
-        {{message}}
+<body ng-controller="MainController">
+
+    <h1>Monster Management</h1>
+
+    <div ng-if="!isAuthenticated">
+        <h2>Login</h2>
+        <form ng-submit="login()">
+            <input type="text" ng-model="credentials.username" placeholder="Username" required>
+            <input type="password" ng-model="credentials.password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
     </div>
-    <script>
-        var app = angular.module('myApp',[]);
-        app.controller('myController', function($scope) {
-            $scope.message = "hello, AngularJS!";
-        });
-    </script>
+
+    <div ng-if="isAuthenticated">
+        <h2>Add Monster</h2>
+        <form ng-submit="addMonster()">
+            <input type="text" ng-model="newMonster.name" placeholder="Monster Name" required>
+            <input type="text" ng-model="newMonster.description" placeholder="Description" required>
+            <input type="text" ng-model="newMonster.type" placeholder="Type">
+            <button type="submit">Add Monster</button>
+        </form>
+
+        <h2>Find Monster by ID</h2>
+        <input type="number" ng-model="monsterIdToFind" placeholder="Enter Monster ID">
+        <button ng-click="findMonsterById()">Find Monster</button>
+        <div ng-if="foundMonster">
+            <h3>Found Monster</h3>
+            <p>ID: {{ foundMonster.id }}</p>
+            <p>Name: {{ foundMonster.name }}</p>
+            <p>Description: {{ foundMonster.description }}</p>
+            <p>Type: {{ foundMonster.type }}</p>
+            <button ng-click="deleteMonster(foundMonster.id)">Delete Monster</button>
+        </div>
+        <div ng-if="!foundMonster && monsterIdToFind">
+            <p>No monster found with ID: {{ monsterIdToFind }}</p>
+        </div>
+
+        <h3>Monsters</h3>
+        <ul>
+            <li ng-repeat="monster in monsters">
+                {{ monster.name }} - {{ monster.description }} (Type: {{ monster.type }})
+                <button ng-click="deleteMonster(monster.id)">Delete</button>
+            </li>
+        </ul>
+
+        <button ng-click="logout()">Logout</button>
+    </div>
+
 </body>
 </html>
