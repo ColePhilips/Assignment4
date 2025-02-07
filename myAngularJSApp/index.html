@@ -14,16 +14,19 @@
 -->
 
 <!DOCTYPE html> <!-- use !tab to generate boiler plate which is the common initial code for html -->
-<html lang="en">
+<html ng-app="myApp">
 <head> <!-- For <meta>, <title>, <script>, <link rel="stylesheet"> -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 </head>
 <body><!-- <h1>, <p>, <div>, <img>, <a>, javascripts -->
-    <p>
-        <strong>oh shit marios in this</strong>
-    </p>
-    <img src="https://media1.tenor.com/m/Ocp8XIv_V_sAAAAd/wonder-effect-super-mario-wonder.gif">
+    <div ng-controller="myController">
+        {{message}}
+    </div>
+    <script>
+        var app = angular.module('myApp',[]);
+        app.controller('myController', function($scope) {
+            $scope.message = "hello, AngularJS!";
+        });
+    </script>
 </body>
 </html>

@@ -43,7 +43,7 @@ app.use(passport.session()); //use of passport
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:5000/swagger/" //This will be changed to the web application URL so when the user is done authenticating this will be there endpoint, will also need to be updated on google site
+    callbackURL: "http://localhost:4200/" //This will be changed to the web application URL so when the user is done authenticating this will be there endpoint, will also need to be updated on google site
   },
   //Callback function to find pre-existing info for user
   function(accessToken, refreshToken, profile, cb) {
